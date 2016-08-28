@@ -1,0 +1,74 @@
+def vJavaLang = '1.8'
+def javaProjects = [ project(':dream-site'), project(':dream-common') ]
+def bootProjects = project(':dream-site')
+def gradleDir = "${rootProject.rootDir}/gradle"
+
+wrapper.gradleVersion = '3.0'
+
+buildscript {
+    ext.springRepo = 'http://repo.spring.io/libs-release'
+
+    repositories {
+        maven { url springRepo }
+    }
+
+    dependencies {
+		classpath 'io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE'
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE"
+    }
+}
+
+configure(allprojects) {
+    apply plugin: 'eclipse'
+}
+
+configure(javaProjects) {
+    apply plugin: 'java'
+
+    targetCompatibility = vJavaLang
+    sourceCompatibility = vJavaLang
+
+    repositories {
+        maven { url springRepo }
+        jcenter()
+    }
+
+    dependencies {
+        compile 'org.slf4j:slf4j-api'
+        compile 'org.projectlombok:lombok'
+        testCompile 'junit:junit'
+        testCompile 'org.hamcrest:hamcrest-library'
+        testCompile 'org.mockito:mockito-core'
+        testCompile 'org.objenesis:objenesis'
+    }
+
+    configurations {
+        // replaced with jcl-over-slf4j
+        all*.exclude group: 'commons-logging', module: 'commons-logging'
+        // replaced with log4j-over-slf4j
+        all*.exclude group: 'log4j', module: 'log4j'
+    }
+
+
+    // Skip generation and removal of .settings/org.eclipse.jdt.core.prefs files
+    // during the normal `gradle eclipse` / `gradle cleanEclipse` lifecycle, as
+    // these files have been checked in with formatting settings imported from
+    // style/sagan-format.xml and style/sagan.importorder.
+    // See http://www.gradle.org/docs/current/userguide/eclipse_plugin.html
+    eclipseJdt.onlyIf { false }
+    cleanEclipseJdt.onlyIf { false }
+}
+
+configure(bootProjects) {
+	apply plugin: "io.spring.dependency-management"
+    apply plugin: 'spring-boot'
+    apply from: "$gradleDir/integTest.gradle"
+
+    springBoot.backupSource = false
+
+    dependencyManagement {
+        imports {
+            mavenBom 'io.spring.platform:platform-bom:2.0.7.RELEASE'
+        }
+    }
+}

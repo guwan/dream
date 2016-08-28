@@ -1,0 +1,60 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE"
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
+
+
+dependencyManagement {
+	imports {
+		mavenBom 'io.spring.platform:platform-bom:2.0.1.RELEASE'
+	}
+}
+
+dependencies {
+
+    compile 'org.springframework:spring-context'
+    compile 'org.springframework.security:spring-security-core'
+    compile 'org.springframework.social:spring-social-github:1.0.0.M4'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    compile 'org.apache.httpcomponents:httpclient'
+
+    compile 'org.elasticsearch:elasticsearch'
+    compile 'io.searchbox:jest:0.1.6'
+    compile 'commons-codec:commons-codec' // needed by Jest's HTTP client?
+    compile 'org.springframework.cloud:spring-cloud-spring-service-connector'
+    compile 'org.springframework.cloud:spring-cloud-cloudfoundry-connector'
+
+    compile 'org.pegdown:pegdown:1.6.0'
+
+    // datasource and connection pool dependencies
+    runtime 'org.postgresql:postgresql:9.4-1201-jdbc4'
+    compile 'com.h2database:h2'
+    compile 'org.apache.tomcat:tomcat-jdbc'
+
+    // for use in on-the-fly database setup and migrations
+    compile 'org.flywaydb:flyway-core'
+
+    // jackson, for JSON and XML serialization
+    compile "com.fasterxml.jackson.core:jackson-core"
+    compile "com.fasterxml.jackson.core:jackson-annotations"
+    compile "com.fasterxml.jackson.core:jackson-databind"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml"
+    compile "org.codehaus.woodstox:woodstox-core-asl"
+
+    compile 'org.jsoup:jsoup:1.8.3'
+    compile 'joda-time:joda-time'
+    compile 'org.hibernate:hibernate-validator'
+
+    // for use in rendering AsciiDoc-based guide content to HTML
+    compile 'org.asciidoctor:asciidoctorj:1.5.2'
+
+    // for use of spring-test's MatcherAssertionErrors.*
+    testCompile "org.springframework:spring-test"
+}

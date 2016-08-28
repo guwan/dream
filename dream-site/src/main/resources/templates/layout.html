@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"
+  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      data-search data-mobile-support> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+      data-search data-mobile-support> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zh-CN"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:data="https://github.com/mxab/thymeleaf-extras-data-attribute"
+	data-search="" data-mobile-support="">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="年会抽奖系统" />
+    <meta name="keywords" content="年会抽奖, 抽奖, 抽奖系统, 免费， 免费抽奖系统， 免费年会抽奖系统" />
+    <meta name="author" content="卢文武" />
+    <link rel="icon" href="img/favicon.ico" th:href="@{/img/favicon.ico}"/>
+
+    <title >年会抽奖系统</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="css/carousel.css" th:href="@{/css/carousel.css}"/>
+    
+    <!-- Theme style -->
+    <link rel="stylesheet" href="css/AdminLTE.css" th:href="@{/css/AdminLTE.css}" />
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css" th:href="@{/plugins/font-awesome/css/font-awesome.min.css}" />
+    <link rel="stylesheet" href="plugins/select2/dist/css/select2.min.css" th:href="@{/plugins/select2/dist/css/select2.min.css}"/>
+    <!-- iCheck -->
+    <link rel="stylesheet" href="plugins/icheck/skins/square/blue.css" th:href="@{/plugins/icheck/skins/square/blue.css}" />
+    <link rel="stylesheet" href="plugins/cropper/dist/cropper.min.css" th:href="@{/plugins/cropper/dist/cropper.min.css}" />
+    <link rel="stylesheet" href="css/lottery.css" th:href="@{/css/lottery.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+    <script th:src="@{/jspm_packages/system.js}"></script>
+  <script th:inline="text">
+    System.config({baseURL: "/[[${@knosApp.version()}]]"});
+  </script>
+  <script th:src="@{/config.js}"></script>
+  <script>
+      System.import('app/main.js')
+  </script>
+</head>
+<body  class="skin-blue sidebar-mini sidebar-collapse" layout:fragment="body">
+
+<nav class="navbar navbar-static-top navbar-light bg-faded main-header" layout:fragment="navbar">
+    <a href="/" class="navbar-brand">年会抽奖系统</a>
+    <ul class="nav navbar-nav  pull-xs-left">
+        <li class="nav-item active">
+            <a class="nav-link" href="/" th:href="@{/}">主页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/lottery" th:href="@{/lottery}">抽奖</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/nameList" th:href="@{/nameList}">人员名单</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/prize" th:href="@{/prize}">奖品</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/house" th:href="@{/house}">房间</a>
+        </li>
+        <li class="nav-item pull-xs-right">
+            <a class="nav-link" href="/about" th:href="@{/about}">关于</a>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav pull-xs-right" sec:authorize="!hasAnyRole('ROLE_USER','ROLE_ADMIN')">
+        <li class="nav-item">
+            <a class="nav-link" id="login" href="login" th:href="@{/login}">登陆 </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="register" th:href="@{/register}">注册</a>
+        </li>
+    </ul>
+    <!-- Navbar Right Menu -->
+    <div class="navbar-custom-menu" sec:authorize="hasAnyRole('ROLE_USER','ROLE_ADMIN')">
+        <ul class="nav navbar-nav">
+            <!-- Messages: style can be found in dropdown.less-->
+            <li class="dropdown messages-menu">
+                <!-- Menu toggle button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="label label-success">{{messageCount}}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="header">你有 {{messageCount}} 条消息</li>
+                    <li>
+                        <!-- inner menu: contains the messages -->
+                        <ul class="menu">
+                            <li v-for="message in messages"><!-- start message -->
+                                <a href="#">
+                                    <div class="pull-left">
+                                        <!-- User Image -->
+                                        <img src="#" v-bind:src="path+ message.fromUser.avatarUrl" class="img-circle" alt="User Image" />
+                                    </div>
+                                    <!-- Message title and timestamp -->
+                                    <h4>
+                                        {{message.fromUser.name}}
+                                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                    </h4>
+                                    <!-- The message -->
+                                    <p>{{message.fromUser.subject}}</p>
+                                </a>
+                            </li>
+                            <!-- end message -->
+                        </ul>
+                        <!-- /.menu -->
+                    </li>
+                    <li class="footer"><a href="#">查看所有消息</a></li>
+                </ul>
+            </li>
+            <!-- /.messages-menu -->
+<!-- 
+            Notifications Menu
+            <li class="dropdown notifications-menu">
+                Menu toggle button
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="label label-warning">{{notificationCount}}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="header">You have {{notificationCount}} notifications</li>
+                    <li>
+                        Inner Menu: contains the notifications
+                        <ul class="menu">
+                            <li>start notification
+                                <a href="#">
+                                    <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                </a>
+                            </li>
+                            end notification
+                        </ul>
+                    </li>
+                    <li class="footer"><a href="#">View all</a></li>
+                </ul>
+            </li>
+            Tasks Menu
+            <li class="dropdown tasks-menu">
+                Menu Toggle Button
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-flag-o"></i>
+                    <span class="label label-danger">{{taskCount}}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="header">You have {{taskCount}} tasks</li>
+                    <li>
+                        Inner menu: contains the tasks
+                        <ul class="menu">
+                            <li>Task item
+                                <a href="#">
+                                    Task title and progress text
+                                    <h3>
+                                        Design some buttons
+                                        <small class="pull-right">20%</small>
+                                    </h3>
+                                    The progress bar
+                                    <div class="progress xs">
+                                        Change the css width attribute to simulate progress
+                                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                            <span class="sr-only">20% Complete</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            end task item
+                        </ul>
+                    </li>
+                    <li class="footer">
+                        <a href="#">View all tasks</a>
+                    </li>
+                </ul>
+            </li> -->
+            <!-- User Account Menu -->
+            <li class="dropdown user user-menu">
+                <!-- Menu Toggle Button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <!-- The user image in the navbar-->
+                    <img src="#" v-bind:src=" path + img " class="user-image" alt="User Image" />
+                    <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                    <span class="hidden-xs name">{{ name }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <!-- The user image in the menu -->
+                    <li class="user-header">
+                        <img src="#" v-bind:src=" path + img " class="img-circle" alt="User Image" />
+
+                        <p id="introduceText">
+                            {{ name }} - {{ bio }}
+                            <small>从{{createTime}}开始使用lottery</small>
+                        </p>
+                    </li>
+                    <!-- Menu Body -->
+                    <li class="user-body">
+                        <div class="row">
+                            <div class="col-xs-4 text-center">
+                                <a href="#">粉丝</a>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <a href="#">博客</a>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <a href="#">关注</a>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                    </li>
+                    <!-- Menu Footer-->
+                    <li class="user-footer">
+                        <div class="pull-left">
+                            <a href="#"  th:href="@{/account/info}" class="btn btn-default btn-flat">账户</a>
+                        </div>
+                        <div class="pull-right">
+                            <a href="#"  th:href="@{/logout}" class="btn btn-default btn-flat">退出</a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!-- /.navbar-custom-menu -->
+</nav>
+
+<div class="wrapper" layout:fragment="wrapper">
+</div>
+<!-- FOOTER -->
+<footer >
+    <p class="pull-xs-right"><a href="#">返回顶部</a></p>
+    <p>&copy; 2016 knos.top, Inc. &middot; <a href="#">保留所有权限及解释权</a> &middot; <a href="#">不作恶不妥协</a></p>
+</footer>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<script src="js/tether.min.js" th:src="@{/js/tether.min.js}"></script>
+<script src="js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="js/holder.min.js" th:src="@{/js/holder.min.js}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="js/ie10-viewport-bug-workaround.js" th:src="@{/js/ie10-viewport-bug-workaround.js}"></script>
+<script src="js/app.min.js" th:src="@{/js/app.min.js}"></script>
+<script src="js/vue.min.js" th:src="@{/js/vue.min.js}"></script>
+<script src="js/handlebars.js" th:src="@{/js/handlebars.js}"></script>
+<script src="plugins/typeahead.js/dist/typeahead.bundle.min.js" 
+th:src="@{/plugins/typeahead.js/dist/typeahead.bundle.min.js}"></script>
+<script src="plugins/cropper/dist/cropper.min.js" th:src="@{/plugins/cropper/dist/cropper.min.js}"></script>
+<script src="plugins/blueimp-canvas-to-blob/js/canvas-to-blob.min.js" th:src="@{/plugins/blueimp-canvas-to-blob/js/canvas-to-blob.min.js}"></script>
+<script src="js/userinfo.js" th:src="@{/js/userinfo.js}"></script>
+<script layout:fragment="js"></script>
+<script layout:fragment="customJs"></script>
+</body>
+</html>

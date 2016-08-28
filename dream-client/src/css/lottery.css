@@ -1,0 +1,85 @@
+.main-sidebar .sidebar-toggle {
+    right: -55px;
+    position: absolute;
+    background-color: transparent;
+    background-image: none;
+    padding: 15px 15px;
+    font-family: fontAwesome;
+}
+.main-sidebar .sidebar-toggle:before {
+    content: "\f0c9";
+}
+.main-sidebar .sidebar-toggle:hover {
+    color: #999;
+}
+.main-sidebar .sidebar-toggle:focus,
+.main-sidebar .sidebar-toggle:active {
+    background: transparent;
+}
+.main-sidebar .sidebar-toggle .icon-bar {
+    display: none;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}
+
+.data-list{
+    width: 360px;
+    margin: 5% auto;
+    padding-bottom: 20%;
+}
+
+.data-list .btn-remove {
+    font-size: 1.6em;
+}
+.data-list .info-list {
+    padding-top: 3%;
+    padding-bottom: 20%;
+}
+/**抽奖名单的搜用户的输入框**/
+.searchInput,.Typeahead-input,.Typeahead-hint,.Typeahead-selectable{
+    width: 100%;
+}
+.Typeahead-selectable{
+     background-color: #fff;
+}
+/**用户等级信息**/
+.searchUserLevel{
+    color: #C376FF;
+    font-size:xx-small;
+}
+.searchUserNevel{
+    color: #C376FF;
+}
+#prize_from{
+    width: 360px;
+    margin: 5% auto;
+}
+.breadcrumb {
+    padding: .75rem 1rem;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: #FFFFFF;
+    border-radius: .25rem;
+}
+.account_sider_list{
+    background-color: #F7F7F9;
+    border: 1px solid #FFF;
+}
+.navbar-nav>li {
+     float: left;
+}
+.main-header .navbar-brand {
+    color: rgba(0,0,0,.3);
+}
+#introduceText {
+    color: #444;
+}
+#introduceText .introduce{
+    
+}
